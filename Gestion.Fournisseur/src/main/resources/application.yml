@@ -1,0 +1,104 @@
+server:
+  port: 9083    #default port where the service will be started
+ 
+eureka:         #tells about the Eureka server details and its refresh time
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+    ip-address: http://104.225.221.31
+    hostname: 104.225.221.31
+    secure-port-enabled: true
+    secure-port: 8082
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9000/eureka/
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
+ 
+spring:
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1  
+#  http:
+#    multipart:
+#       max-file-size: 30MB
+#       max-request-size: 30MB       
+  application:
+    name: FOURNISSEURS   #current service name to be used by the eureka server
+     
+
+logging:
+  level:
+    com.example.howtodoinjava: DEBUG
+
+hystrixProperties:
+  hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+
+
+dropboxservice: 
+  ribbon:
+    ConnectTimeout: 60000
+    ReadTimeout: 60000  
+    
+hystrix:
+   command:
+      default:
+         execution:
+            iso lation:
+               thread:
+                  timeoutInMilliseconds: 60000
+
+
+ribbon:
+   ReadTimeout: 60000
+   connection-timeout: 60000
+   eureka:
+      enabled: true
+
+  
+zuul:
+  sensitiveHeaders:
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+  host:
+      time-to-live: -1
+      connect-timeout-millis: 60000
+      max-per-route-connections: 60000
+      max-total-connections: 60000
+      socket-timeout-millis: 60000
+  routes:
+     
+     TPD-EN:
+      path: /en/**
+      serviceId: client2
+      stripPrefix: true
+     TPD-ES:
+      path: /es/**
+      serviceId: client1
+      stripPrefix: true        
+     dropboxservice:
+      path: /dropboxservice/**
+      serviceId: dropboxservice
+      stripPrefix: true
+     mailmanager:
+      path: /mailmanager/**
+      serviceId: mailmanager
+      stripPrefix: true  
+     eventmanager:
+      path: /eventservice/**
+      serviceId: eventservice
+      stripPrefix: true 
+     REPORTING:
+      path: /reporting/**
+      serviceId: REPORTING
+      stripPrefix: true  
+     TRIBUNAL:
+      path: /tribunal/**
+      serviceId: tribunal
+      stripPrefix: true 
+     NOTIF:
+      path: /NOTIF/**
+      serviceId: NOTIF
+      stripPrefix: true  
